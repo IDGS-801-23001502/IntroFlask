@@ -1,6 +1,7 @@
 from flask import Flask,render_template,request, flash
 from flask_wtf.csrf import CSRFProtect
 import forms
+import math
 
 app = Flask(__name__)
 app.secret_key = "clave secreta"
@@ -41,6 +42,25 @@ def cinepolis():
         except ValueError:
             error = f"Ingresa valores numericos correctos"
     return render_template('cinepolis.html',valor_pagar=valor_pagar, error=error, datos=datos)
+
+@app.route("/distancia", methods=['GET', 'POST'])
+def calcular_distancia():
+    distancia = None
+    puntos = {}
+    if request.method == 'POST':
+        # Obtención de datos por HTML puro
+        x1 = float(request.form.get('x1', 0))
+        y1 = float(request.form.get('y1', 0))
+        x2 = float(request.form.get('x2', 0))
+        y2 = float(request.form.get('y2', 0))
+        
+        puntos = {'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2}
+        
+        # Fórmula de la imagen
+        distancia = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+        distancia = round(distancia, 2)
+
+    return render_template('index.html', distancia=distancia, puntos=puntos)
 
 @app.route("/alumnos")
 def alumnos():

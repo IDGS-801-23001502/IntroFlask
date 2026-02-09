@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% import 'macros.html' as mcr %}
+
+{% block content %}
+<section class="container" style="margin-top: 50px; margin-bottom: 50px;">
+    <div class="contact-card" style="max-width: 500px;">
+        <div class="contact-header">
+            <h2 class="form-title">Cálculo de Distancia</h2>
+        </div>
+
+        <p style="margin-bottom: 20px; font-size: 0.9rem; color: #666;">
+            Ingrese las coordenadas para aplicar la fórmula: <br>
+            <strong>$d = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$</strong>
+        </p>
+
+        <form method="POST" action="/distancia" class="space-y">
+            {# Uso de Macros para los puntos #}
+            {{ mcr.input_punto('Punto 1 (x₁, y₁)', 'x1', 'y1', puntos.x1) }}
+            {{ mcr.input_punto('Punto 2 (x₂, y₂)', 'x2', 'y2', puntos.x2) }}
+
+            <button type="submit" class="submit-button">
+                Calcular Distancia
+            </button>
+        </form>
+
+        {% if distancia is not none %}
+            <div class="success-box" style="margin-top: 25px;">
+                <p class="success-title">Resultado del Cálculo:</p>
+                <p class="success-text" style="font-size: 1.2rem; font-weight: 800;">
+                    Distancia (d) = {{ distancia }}
+                </p>
+                {% if distancia == 10 %}
+                    <small style="color: #15803d;">(Coincide con el ejemplo del ejercicio: 10.0)</small>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

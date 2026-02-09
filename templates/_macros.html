@@ -5,12 +5,20 @@
     </div>
 {%endmacro%}
 
-{% macro campoNuevo(field)%}
-    <td>{{field.label}}</td>
-    <dd>{{field(**kwargs) | safe}}</dd>
-    {% if field.errors %}
-        {% for error in field.errors %}
-            <li style="color: red;">{{error}}</li>
-        {%endfor%}
-    {%endif%}
-{%endmacro%}
+{% macro input_punto(label, name_x, name_y, val_x='', val_y='') %}
+<div style="margin-bottom: 1.5rem; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+    <h4 style="margin-top: 0; color: var(--color-primary);">{{ label }}</h4>
+    <div style="display: flex; gap: 10px;">
+        <div style="flex: 1;">
+            <label>Coordenada X:</label>
+            <input type="number" step="any" name="{{ name_x }}" value="{{ val_x }}" required 
+                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+        <div style="flex: 1;">
+            <label>Coordenada Y:</label>
+            <input type="number" step="any" name="{{ name_y }}" value="{{ val_y }}" required 
+                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+    </div>
+</div>
+{% endmacro %}
