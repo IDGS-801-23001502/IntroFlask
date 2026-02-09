@@ -48,15 +48,11 @@ def calcular_distancia():
     distancia = None
     puntos = {}
     if request.method == 'POST':
-        # Obtención de datos por HTML puro
         x1 = float(request.form.get('x1', 0))
         y1 = float(request.form.get('y1', 0))
         x2 = float(request.form.get('x2', 0))
         y2 = float(request.form.get('y2', 0))
-        
         puntos = {'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2}
-        
-        # Fórmula de la imagen
         distancia = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
         distancia = round(distancia, 2)
 
