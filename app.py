@@ -13,6 +13,35 @@ def index():
     lista=["Juan","Mario","Pedro","Dario"]
     return render_template("index.html",titulo = titulo,lista=lista)
 
+@app.route("/cinepolis", methods=["GET","POST"])
+def cinepolis():
+    valor_pagar = 0
+    error = None
+    PRECIO_TICKET = 12000
+    datos = {}
+    if request.method == "POST":
+        try:
+            nombre = request.form.get('nombre')
+            compradores = int(request.form.get('compradores'))
+            boletas = int(request.form.get('boletas'))
+            tarjeta = request.form.get('tarjeta') == 'si'
+
+            datos = {'nombre': nombre, 'compradores': compradores, 'boletas': boletas}
+            if boletas > (compradores * 7):
+                error = f"¡Error! Máximo 7 boletas por persona (Máximo permitido: {compradores * 7})"
+            else:
+                subtotal = boletas * PRECIO_TICKET
+                if boletas > 5:
+                    subtotal *= 0.85
+                elif 3 <= boletas <= 5:
+                    subtotal *= 0.90
+                if tarjeta:
+                    subtotal *= 0.90
+                valor_pagar = subtotal
+        except ValueError:
+            error = f"Ingresa valores numericos correctos"
+    return render_template('cinepolis.html',valor_pagar=valor_pagar, error=error, datos=datos)
+
 @app.route("/alumnos")
 def alumnos():
     return render_template("alumnos.html")
@@ -73,7 +102,6 @@ def suma(n1,n2):
 @app.route("/default/<string:parm>")
 def func(parm="Juan"):
     return f"<h1>¡Hola, {parm}!</h1>"
-#+524794076586
 
 @app.route("/operas")
 def operas():

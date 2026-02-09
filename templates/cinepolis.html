@@ -1,0 +1,172 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    :root {
+        --cine-blue: #002d72;
+        --cine-yellow: #ffcc00;
+        --cine-light-blue: #004fb9;
+    }
+
+    body { 
+        background-color: var(--cine-blue) !important; 
+        color: white !important;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card { 
+        background-color: rgba(255, 255, 255, 0.05); 
+        border: 2px solid var(--cine-light-blue); 
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        color: white; 
+    }
+
+    .section-title { 
+        color: var(--cine-yellow);
+        border-bottom: 2px solid var(--cine-yellow); 
+        padding-bottom: 8px; 
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .form-control { 
+        background-color: white; 
+        color: #000; 
+        border: 2px solid var(--cine-yellow);
+        border-radius: 8px;
+    }
+
+    .form-control:focus {
+        border-color: var(--cine-yellow);
+        box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+    }
+
+    .btn-cine-primary { 
+        background-color: var(--cine-yellow); 
+        color: var(--cine-blue); 
+        font-weight: 800; 
+        border: none;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .btn-cine-primary:hover { 
+        background-color: white;
+        transform: scale(1.05);
+        color: var(--cine-blue);
+    }
+
+    .btn-cine-outline {
+        border: 2px solid white;
+        color: white;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .btn-cine-outline:hover {
+        background-color: white;
+        color: var(--cine-blue);
+    }
+
+    .label-bold { font-weight: 600; color: #f8f9fa; }
+
+    .brand-text {
+        color: var(--cine-yellow);
+        font-style: italic;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .valor-output {
+        background-color: white !important;
+        color: var(--cine-blue) !important;
+        border: 4px solid var(--cine-yellow) !important;
+    }
+</style>
+
+<div class="container pb-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 brand-text fw-bold">CINÉPOLIS</h1>
+    </div>
+
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="row g-4">
+            <div class="col-md-7">
+                <div class="card p-4 h-100">
+                    <h4 class="section-title"><i class="bi bi-ticket-perforated"></i> Entradas</h4>
+                    <div class="row mb-3 align-items-center">
+                        <label class="col-sm-5 label-bold">Nombre del Cliente:</label>
+                        <div class="col-sm-7">
+                            <input type="text" name="nombre" class="form-control" value="{{ datos.nombre or '' }}" placeholder="Ej. Juan Pérez" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <label class="col-sm-5 label-bold">Cantidad Compradores:</label>
+                        <div class="col-sm-7">
+                            <input type="number" name="compradores" class="form-control" value="{{ datos.compradores or '' }}" min="1" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <label class="col-sm-5 label-bold">Tarjeta Cineco:</label>
+                        <div class="col-sm-7">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="tarjeta" value="si" id="si" {% if datos.tarjeta == 'si' %}checked{% endif %}>
+                                <label class="form-check-label text-white" for="si">Sí</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="tarjeta" value="no" id="no" {% if not datos.tarjeta or datos.tarjeta == 'no' %}checked{% endif %}>
+                                <label class="form-check-label text-white" for="no">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <label class="col-sm-5 label-bold">Cantidad de Boletas:</label>
+                        <div class="col-sm-7">
+                            <input type="number" name="boletas" class="form-control" value="{{ datos.boletas or '' }}" min="1" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="card p-4 h-100 text-center border-warning">
+                    <h4 class="section-title text-start"><i class="bi bi-cash-stack"></i> Salidas</h4>
+                    <div class="my-auto">
+                        <label class="label-bold d-block mb-3 fs-5">TOTAL A PAGAR</label>
+                        <input type="text" class="form-control text-center fw-bold fs-2 valor-output shadow-lg" 
+                               value="${{ "{:,.2f}".format(valor_pagar) }}" readonly>
+                    </div>
+
+                    {% if error %}
+                    <div class="alert alert-warning mt-4 border-0 shadow-sm" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill"></i> {{ error }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5 align-items-center bg-dark bg-opacity-25 rounded-4 p-4 mx-1">
+            <div class="col-md-7 text-center text-md-start">
+                <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                    <img src="https://static.cinepolis.com/img/lg-cinepolis.png" alt="Cinépolis Logo" style="width: 120px; filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(10deg);">
+                    <div class="ms-3">
+                        <h2 class="mb-0 fw-bold" style="letter-spacing: 3px; color: white;">CINÉPOLIS<span>&reg;</span></h2>
+                        <p class="mb-0 text-uppercase label-bold" style="color: var(--cine-yellow);">La Capital del Cine</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-5 mt-4 mt-md-0">
+                <div class="d-grid gap-3">
+                    <button type="submit" class="btn btn-cine-primary btn-lg shadow">Procesar Compra</button>
+                    <a href="/cinepolis" class="btn btn-cine-outline">Limpiar</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
