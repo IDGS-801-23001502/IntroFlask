@@ -12,6 +12,7 @@
             <strong>$d = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$</strong>
         </p>
         <form method="POST" action="/distancia" class="space-y">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             {{ macros.input_punto('Punto 1 (x₁, y₁)', 'x1', 'y1', puntos.x1) }}
             {{ macros.input_punto('Punto 2 (x₂, y₂)', 'x2', 'y2', puntos.x2) }}
             <button type="submit" class="submit-button">
@@ -24,9 +25,6 @@
                 <p class="success-text" style="font-size: 1.2rem; font-weight: 800;">
                     Distancia (d) = {{ distancia }}
                 </p>
-                {% if distancia == 10 %}
-                    <small style="color: #15803d;">(Coincide con el ejemplo del ejercicio: 10.0)</small>
-                {% endif %}
             </div>
         {% endif %}
     </div>
