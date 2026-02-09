@@ -56,7 +56,7 @@ def calcular_distancia():
         distancia = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
         distancia = round(distancia, 2)
 
-    return render_template('index.html', distancia=distancia, puntos=puntos)
+    return render_template('distancia.html', distancia=distancia, puntos=puntos)
 
 @app.route("/alumnos")
 def alumnos():
